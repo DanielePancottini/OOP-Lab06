@@ -34,43 +34,64 @@ public class StrictBankAccount implements BankAccount {
     /**
      * 
      * {@inheritDoc}
+     * @throws WrongAccountHolderException 
      */
-    public void deposit(final int usrID, final double amount) {
-        if (checkUser(usrID)) {
-            this.balance += amount;
-            increaseTransactionsCount();
-        }
+    public void deposit(final int usrID, final double amount) throws WrongAccountHolderException {
+    	
+    	if(!checkUser(usrID)) {
+    		throw new WrongAccountHolderException("UserID not correct");
+    	}
+    	
+        this.balance += amount;
+        increaseTransactionsCount();
+        
     }
 
     /**
      * 
      * {@inheritDoc}
      */
-    public void withdraw(final int usrID, final double amount) {
-        if (checkUser(usrID) && isWithdrawAllowed(amount)) {
-            this.balance -= amount;
-            increaseTransactionsCount();
-        }
+    public void withdraw(final int usrID, final double amount) throws WrongAccountHolderException, NotEnoughFoundsException{
+        
+    	if(!checkUser(usrID)) {
+    		throw new WrongAccountHolderException("UserID not correct");
+    	}
+    	if(!isWithdrawAllowed(amount)) {
+    		throw new NotEnoughFoundsException("Not enaugh founds into bank account");
+    	}
+    	
+        this.balance -= amount;
+        increaseTransactionsCount();
+     
     }
 
     /**
      * 
      * {@inheritDoc}
+     * @throws WrongAccountHolderException 
+     * @throws TransactionsOverQuotaException 
      */
-    public void depositFromATM(final int usrID, final double amount) {
+    public void depositFromATM(final int usrID, final double amount) throws WrongAccountHolderException, TransactionsOverQuotaException {
         if (totalTransactionCount < maximumAllowedATMTransactions) {
             this.deposit(usrID, amount - StrictBankAccount.ATM_TRANSACTION_FEE);
             increaseTransactionsCount();
+        }  else {
+        	throw new TransactionsOverQuotaException("Maximum Allowed ATM Transactions reached");
         }
     }
 
     /**
      * 
      * {@inheritDoc}
+     * @throws NotEnoughFoundsException 
+     * @throws WrongAccountHolderException 
+     * @throws TransactionsOverQuotaException 
      */
-    public void withdrawFromATM(final int usrID, final double amount) {
+    public void withdrawFromATM(final int usrID, final double amount) throws WrongAccountHolderException, NotEnoughFoundsException, TransactionsOverQuotaException {
         if (totalTransactionCount < maximumAllowedATMTransactions) {
             this.withdraw(usrID, amount + StrictBankAccount.ATM_TRANSACTION_FEE);
+        } else {
+        	throw new TransactionsOverQuotaException("Maximum Allowed ATM Transactions reached");
         }
     }
 

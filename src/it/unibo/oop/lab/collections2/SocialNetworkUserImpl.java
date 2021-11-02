@@ -1,7 +1,12 @@
 package it.unibo.oop.lab.collections2;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -29,6 +34,8 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      * 
      * think of what type of keys and values would best suit the requirements
      */
+	
+	private final Map<String, List<U>> userGroups;
 
     /*
      * [CONSTRUCTORS]
@@ -56,7 +63,12 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
      */
     public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
         super(name, surname, user, userAge);
+        this.userGroups = new HashMap<String, List<U>>();
     }
+    
+    public SocialNetworkUserImpl(final String name, final String surname, final String user) {
+		this(name, surname, user, -1);
+	}
 
     /*
      * [METHODS]
@@ -66,17 +78,34 @@ public class SocialNetworkUserImpl<U extends User> extends UserImpl implements S
 
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
-        return false;
+        if(this.userGroups.get(circle) == null) {
+        	//first add
+        	this.userGroups.put(circle, new ArrayList<>(Arrays.asList(user)));
+        } else {
+        	if(this.userGroups.get(circle).contains(user)) {
+        		return false;
+        	}
+        	this.userGroups.get(circle).add(user);
+        }
+        
+        return true;
     }
 
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
-        return null;
+        return (this.userGroups.get(groupName) != null) ? new ArrayList<U> (this.userGroups.get(groupName)) : new ArrayList<>();
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        return null;
+        
+    	List<U> resultList = new ArrayList<>();
+    	
+        for(List<U> users : this.userGroups.values()) {
+        	resultList.addAll(users);
+        }
+    	
+    	return resultList;
     }
 
 }

@@ -12,7 +12,7 @@ public interface BankAccount {
      * @param amount
      *            amount to be withdrawn
      */
-    void withdraw(int usrID, double amount);
+    void withdraw(int usrID, double amount) throws WrongAccountHolderException, NotEnoughFoundsException;
 
     /**
      * 
@@ -21,7 +21,7 @@ public interface BankAccount {
      * @param amount
      *            amount to be credited
      */
-    void deposit(int usrID, double amount);
+    void deposit(int usrID, double amount) throws WrongAccountHolderException;
 
     /**
      * 
@@ -30,7 +30,7 @@ public interface BankAccount {
      * @param amount
      *            amount to be deposited via ATM
      */
-    void depositFromATM(int usrID, double amount);
+    void depositFromATM(int usrID, double amount) throws WrongAccountHolderException, TransactionsOverQuotaException;
 
     /**
      * 
@@ -39,7 +39,7 @@ public interface BankAccount {
      * @param amount
      *            amount to be withdrawn via AT
      */
-    void withdrawFromATM(int usrID, double amount);
+    void withdrawFromATM(int usrID, double amount) throws WrongAccountHolderException, NotEnoughFoundsException, TransactionsOverQuotaException;
 
     /**
      * 
