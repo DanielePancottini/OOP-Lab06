@@ -11,6 +11,9 @@ import java.util.Map;
  * 
  */
 public final class UseCollection {
+	
+	private static final int IT_START = 1_000;
+	private static final int IT_END = 2_000;
 
     private UseCollection() {
     }
@@ -27,8 +30,8 @@ public final class UseCollection {
     	
     	List<Integer> intList = new ArrayList<>();
     	
-    	for(int i = 0; i < 1000; i++) {
-    		intList.add(1000 + i);
+    	for(int i = IT_START; i < IT_END; i++) {
+    		intList.add(i);
     	}
     	
         /*
@@ -56,11 +59,11 @@ public final class UseCollection {
         /*
          * 4) Using a single for-each, print the contents of the arraylist.
          */
-    	/*
+    	
     	for(int elem : intList) {
     		System.out.println(elem);
     	}
-    	*/
+    	
     	
         /*
          * 5) Measure the performance of inserting new elements in the head of
@@ -109,7 +112,7 @@ public final class UseCollection {
     	startTime = System.nanoTime();
     	
     	for(int i = 0; i < 1_000; i++) {
-    		int x = intList.get(intList.size() / 2 - 500 + i);
+    		intList.get(intList.size() / 2 - 500 + i);
     	}
     	
     	endTime = System.nanoTime();
@@ -121,7 +124,7 @@ public final class UseCollection {
     	startTime = System.nanoTime();
     	
     	for(int i = 0; i < 1_000; i++) {
-    		int x = intLinkedList.get(intLinkedList.size() / 2 - 500 + i);
+    		intLinkedList.get(intLinkedList.size() / 2 - 500 + i);
     	}
     	
     	endTime = System.nanoTime();
@@ -145,9 +148,13 @@ public final class UseCollection {
          * Oceania -> 38,304,000
          */
     	
-    	Map<String, Long> continentsMap = new HashMap<>() {{
+    	final Map<String, Long> continentsMap = new HashMap<>() {{
     		put("Africa", 1_110_635_000L);
     		put("Americas", 972_005_000L);
+    		put("Antarctica", 0L);
+    		put("Asia", 4_298_723_000L);
+    		put("Europe", 742_452_000L);
+    		put("Oceania", 38_304_000L);
     	}};
     	
         /*
@@ -156,8 +163,8 @@ public final class UseCollection {
     	
     	long population = 0;
     	
-    	for(String key : continentsMap.keySet()) {
-    		population += continentsMap.get(key);
+    	for(long value : continentsMap.values()) {
+    		population += value;
     	}
     	
     	System.out.println("Population: " + population);
